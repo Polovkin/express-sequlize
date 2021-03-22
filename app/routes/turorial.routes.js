@@ -8,7 +8,8 @@ module.exports = app => {
 
   // Retrieve all Tutorials from the database.
   router.get("/", tutorials.findAll);
-
+  // Retrieve all published Tutorials
+  router.get("/published", tutorials.findAllPublished);
   // Find a single Tutorial with an id
   router.get("/:id", tutorials.findOne);
 
@@ -24,8 +25,7 @@ module.exports = app => {
   // Delete all Tutorials from the database.
   router.delete("/", tutorials.deleteAll);
 
-  // Retrieve all published Tutorials
-  router.get("/published", tutorials.findAllPublished);
+
 
 
   app.use('/api/tutorials', router);
