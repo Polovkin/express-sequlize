@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/tutorial.routes")(app);
 require("./app/routes/comments.routes")(app);
+require("./app/routes/tag.routes")(app);
 const run = async () => {
 
 };

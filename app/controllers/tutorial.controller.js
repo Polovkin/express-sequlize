@@ -1,6 +1,6 @@
 const db = require("../models");
 const Tutorial = db.tutorials;
-const Comment = db.comments;
+const Tag = db.tag;
 
 // Create and Save a new Tutorial
 exports.createTutorial = async (req, res) => {
@@ -29,12 +29,24 @@ exports.createTutorial = async (req, res) => {
 };
 
 // Get the comments for a given tutorial
-exports.findTutorialById  = async (req, res) => {
+exports.findTutorialById = async (req, res) => {
     const id = req.params.id;
 
     try {
         // IMPORTANT - includes get data from linked table
-        const response = await Tutorial.findByPk(id, { include: ["comments"] })
+        const response = await Tutorial.findByPk(id, {
+            include: ["comments", {
+                model: Tag,
+                as: "tags",
+                attributes: ["id", "name"],
+                through: {
+                    attributes: [],
+                },
+                // through: {
+                //   attributes: ["tag_id", "tutorial_id"],
+                // },
+            },]
+        })
 
         if (!response) {
             res.status(500).send({
@@ -55,7 +67,22 @@ exports.findTutorialById  = async (req, res) => {
 exports.findAll = async (req, res) => {
     try {
         const response = await Tutorial.findAll({
-            include: ["comments"],
+            include: ["comments", {
+                model: Tag,
+                as: "tags",
+                attributes: ["id", "name"],
+                through: {
+                    attributes: [],
+                },
+                // Atrivutes
+                /*  attributes: ["id", "name"],
+                  through: {
+                      attributes: [],
+                  }
+                  through: {
+                      attributes: ["tag_id", "tutorial_id"],
+                  },*/
+            },],
         })
         res.send(response);
     } catch (e) {
