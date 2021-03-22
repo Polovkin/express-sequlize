@@ -2,22 +2,23 @@ const db = require("../models");
 const Tutorial = db.tutorials;
 const Comment = db.comments;
 
-// Create and Save a new Tutorial
-exports.createTutorial = async (req, res) => {
-    // Validate request
-    if (!req.body.title) {
+
+// Create and Save a new Comment to Tutorial
+exports.createComment = async (req, res) => {
+    if (!req.body.text) {
         res.status(400).send({
             message: "Content can not be empty!"
         });
         return;
     }
-    const tutorial = {
-        title: req.body.title,
-        description: req.body.description,
+    const comment = {
+        name: req.body.name,
+        text: req.body.text,
+        tutorialId: req.body.tutorialId,
     };
 
     try {
-        const response = await Tutorial.create(tutorial)
+        const response = await Comment.create(comment)
         res.send(response);
     } catch (e) {
         res.status(500).send({
@@ -25,20 +26,19 @@ exports.createTutorial = async (req, res) => {
         });
         throw e
     }
-
-};
+}
 
 // Get the comments for a given tutorial
-exports.findTutorialById  = async (req, res) => {
+exports.findCommentById   = async (req, res) => {
     const id = req.params.id;
 
     try {
         // IMPORTANT - includes get data from linked table
-        const response = await Tutorial.findByPk(id, { include: ["comments"] })
+        const response = await Comment.findByPk(id, { include: ["tutorial"] })
 
         if (!response) {
             res.status(500).send({
-                message: "no Tutorial with id=" + id
+                message: "no Comment with id=" + id
             });
             return response
         }
@@ -46,21 +46,6 @@ exports.findTutorialById  = async (req, res) => {
     } catch (e) {
         res.status(500).send({
             message: "Error retrieving Tutorial with id=" + id
-        });
-        throw e
-    }
-};
-
-// Get all Tutorials include comments
-exports.findAll = async (req, res) => {
-    try {
-        const response = await Tutorial.findAll({
-            include: ["comments"],
-        })
-        res.send(response);
-    } catch (e) {
-        res.status(500).send({
-            message: e.message || "Some error occurred while retrieving tutorials."
         });
         throw e
     }

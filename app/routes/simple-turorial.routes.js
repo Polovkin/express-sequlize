@@ -1,15 +1,17 @@
 module.exports = app => {
-  const tutorials = require("../controllers/tutorial.controller.js");
+  const tutorials = require("../controllers/simple-tutorial.controller.js");
 
-  var router = require("express").Router();
+  const router = require("express").Router();
 
   // Create and Save a new Tutorial
   router.post("/", tutorials.create);
 
   // Retrieve all Tutorials from the database.
   router.get("/", tutorials.findAll);
+
   // Retrieve all published Tutorials
   router.get("/published", tutorials.findAllPublished);
+
   // Find a single Tutorial with an id
   router.get("/:id", tutorials.findOne);
 
@@ -24,9 +26,6 @@ module.exports = app => {
 
   // Delete all Tutorials from the database.
   router.delete("/", tutorials.deleteAll);
-
-
-
 
   app.use('/api/tutorials', router);
 };
