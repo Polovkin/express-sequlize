@@ -1,5 +1,15 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
+    .container
+        .row
+            .col-sm-8.mt-3
+                h4 Node.js upload images - bezkoder.com
+                form.mt-4(action='/upload' method='POST' enctype='multipart/form-data')
+                    .form-group
+                        input#input-files.form-control-file.border(type='file' name='file')
+                    button.btn.btn-primary(type='submit') Submit
+        hr
+        .row
+            .col-sm-12
+                .preview-images
